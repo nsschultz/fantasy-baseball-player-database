@@ -1,0 +1,9 @@
+**/bin
+**/obj
+/_deploy
+.dockerignore
+.gitignore
+Dockerfile
+Jenkinsfile
+LICENSE
+README.md

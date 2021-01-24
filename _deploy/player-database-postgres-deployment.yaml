@@ -1,0 +1,46 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: player-database-postgres
+  namespace: baseball
+  labels:
+    app: player-database-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: player-database-postgres
+  template:
+    metadata:
+      labels:
+        app: player-database-postgres
+    spec:
+      containers:
+      - name: player-database-postgres
+        image: postgres:12-alpine
+        volumeMounts:
+        - name: player-database-data-volume
+          mountPath: "/var/lib/postgresql/data"
+        ports:
+        - name: db
+          containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: player-postgres-secret
+              key: dbname
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: player-postgres-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: player-postgres-secret
+              key: password
+      volumes:
+      - name: player-database-data-volume
+        persistentVolumeClaim:
+          claimName: player-database-data-claim
