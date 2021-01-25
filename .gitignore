@@ -1,0 +1,12 @@
+# compiled files
+bin/
+obj/
+# test data
+bak/
+data/
+libs/
+reports/
+# vs code files
+.vscode/
+# Context Factory that is only used locally
+PlayerContextFactory.cs

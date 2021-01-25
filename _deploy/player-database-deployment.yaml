@@ -1,0 +1,40 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: player-database
+  namespace: baseball
+  labels:
+    app: player-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: player-database
+  template:
+    metadata:
+      labels:
+        app: player-database
+    spec:
+      containers:
+      - name: player-database
+        image: nschultz/fantasy-baseball-player-database:0.5.2
+        ports:
+          - name: web
+            containerPort: 8080
+        env:
+        - name: player-database-user
+          valueFrom:
+            secretKeyRef:
+              name: player-postgres-secret
+              key: username
+        - name: player-database-password
+          valueFrom:
+            secretKeyRef:
+              name: player-postgres-secret
+              key: password
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
