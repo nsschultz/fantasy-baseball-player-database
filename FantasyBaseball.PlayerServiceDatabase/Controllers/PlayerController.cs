@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using FantasyBaseball.CommonModels.Exceptions;
-using FantasyBaseball.CommonModels.Player;
+using FantasyBaseball.Common.Exceptions;
+using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Services;
 using Microsoft.AspNetCore.Mvc;
 

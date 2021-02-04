@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FantasyBaseball.CommonModels.Player;
+using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Database;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
 
@@ -48,7 +48,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
         }
 
         private PlayerEntity FindEntity(BaseballPlayer player) =>
-            _context.Players.AsQueryable().Where(p => p.BhqId == player.PlayerInfo.Id).Where(p => p.Type == player.PlayerInfo.Type).FirstOrDefault();
+            player.Id != Guid.Empty
+                ? _context.Players.Find(player.Id)
+                : _context.Players.AsQueryable().Where(p => p.BhqId == player.BhqId).Where(p => p.Type == player.Type).FirstOrDefault();
 
         private async Task UpsertPlayers(IEnumerable<PlayerEntity> entities)
         {

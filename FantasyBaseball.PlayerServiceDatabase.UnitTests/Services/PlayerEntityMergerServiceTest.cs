@@ -1,13 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FantasyBaseball.CommonModels.Enums;
-using FantasyBaseball.CommonModels.Player;
-using FantasyBaseball.CommonModels.Stats;
+using FantasyBaseball.Common.Enums;
+using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
-using FantasyBaseball.PlayerServiceDatabase.Services;
 using Xunit;
 
-namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
+namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
 {
     public class PlayerEntityMergerServiceTest
     {
@@ -95,30 +94,22 @@ namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
         private static BaseballPlayer BuildPlayer(int value, PlayerType type) =>
             new BaseballPlayer 
             {
-                PlayerInfo = new PlayerInfo 
-                {
-                    Id = value,
-                    FirstName = $"First-{value}",
-                    LastName = $"Last-{value}",
-                    Age = value,
-                    Type = type,
-                    Positions = type == PlayerType.U ? "abc" : $"Pos{value}",
-                    Team = $"Team-{value}",
-                    Status = value == 10 ? PlayerStatus.XX : PlayerStatus.DL
-                },
-                DraftInfo = new DraftInfo
-                {
-                    DraftRank = value + 1,
-                    AverageDraftPick = value + 2,
-                    HighestPick = value + 3,
-                    DraftedPercentage = value + 4
-                },
-                BhqScores = new BhqScores { MayberryMethod = value + 5, Reliability = value + 6 },
-                LeagueInfo = new LeagueInfo 
-                {
-                    League1 = value == 10 ? LeagueStatus.R : LeagueStatus.A,
-                    League2 = value != 10 ? LeagueStatus.X : LeagueStatus.A,
-                },
+                BhqId = value,
+                FirstName = $"First-{value}",
+                LastName = $"Last-{value}",
+                Age = value,
+                Type = type,
+                Positions = type == PlayerType.U ? "abc" : $"Pos{value}",
+                Team = $"Team-{value}",
+                Status = value == 10 ? PlayerStatus.XX : PlayerStatus.DL,
+                DraftRank = value + 1,
+                AverageDraftPick = value + 2,
+                HighestPick = value + 3,
+                DraftedPercentage = value + 4,
+                MayberryMethod = value + 5, 
+                Reliability = value + 6,
+                League1 = value == 10 ? LeagueStatus.R : LeagueStatus.A,
+                League2 = value != 10 ? LeagueStatus.X : LeagueStatus.A,
                 YearToDateBattingStats = value == 10 ? BuildBattingStats() : new BattingStats(),
                 ProjectedBattingStats = value != 10 ? BuildBattingStats() : new BattingStats(),
                 YearToDatePitchingStats = value == 10 ? BuildPitchingStats() : new PitchingStats(),
@@ -129,21 +120,21 @@ namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
 
         private static void ValidatePlayer(int value, BaseballPlayer expected, PlayerEntity actual)
         {
-            Assert.Equal(expected.PlayerInfo.Id, actual.BhqId);
-            Assert.Equal(expected.PlayerInfo.FirstName, actual.FirstName);
-            Assert.Equal(expected.PlayerInfo.LastName, actual.LastName);
-            Assert.Equal(expected.PlayerInfo.Age, actual.Age);
-            Assert.Equal(expected.PlayerInfo.Type, actual.Type);
-            Assert.Equal(expected.PlayerInfo.Type == PlayerType.U ? "DEFAULT" : expected.PlayerInfo.Positions.ToUpper(), BuildPositionString(actual.Positions));
-            Assert.Equal(expected.PlayerInfo.Team, actual.Team);
-            Assert.Equal(expected.PlayerInfo.Status, actual.Status);
-            Assert.Equal(expected.DraftInfo.DraftRank, actual.DraftRank);
-            Assert.Equal(expected.DraftInfo.AverageDraftPick, actual.AverageDraftPick);
-            Assert.Equal(expected.DraftInfo.HighestPick, actual.HighestPick);
-            Assert.Equal(expected.DraftInfo.DraftedPercentage, actual.DraftedPercentage);
-            Assert.Equal(expected.BhqScores.MayberryMethod, actual.MayberryMethod);
-            Assert.Equal(expected.BhqScores.Reliability, actual.Reliability);
-            Assert.Equal(value == 10 ? expected.LeagueInfo.League1 : expected.LeagueInfo.League2, actual.LeagueStatuses.First().LeagueStatus);
+            Assert.Equal(expected.BhqId, actual.BhqId);
+            Assert.Equal(expected.FirstName, actual.FirstName);
+            Assert.Equal(expected.LastName, actual.LastName);
+            Assert.Equal(expected.Age, actual.Age);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Type == PlayerType.U ? "DEFAULT" : expected.Positions.ToUpper(), BuildPositionString(actual.Positions));
+            Assert.Equal(expected.Team, actual.Team);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.DraftRank, actual.DraftRank);
+            Assert.Equal(expected.AverageDraftPick, actual.AverageDraftPick);
+            Assert.Equal(expected.HighestPick, actual.HighestPick);
+            Assert.Equal(expected.DraftedPercentage, actual.DraftedPercentage);
+            Assert.Equal(expected.MayberryMethod, actual.MayberryMethod);
+            Assert.Equal(expected.Reliability, actual.Reliability);
+            Assert.Equal(value == 10 ? expected.League1 : expected.League2, actual.LeagueStatuses.First().LeagueStatus);
             Assert.Single(actual.BattingStats);
             Assert.Single(actual.PitchingStats);
             ValidatePlayerBattingStats(value == 10 ? expected.YearToDateBattingStats : expected.ProjectedBattingStats, actual.BattingStats.First());

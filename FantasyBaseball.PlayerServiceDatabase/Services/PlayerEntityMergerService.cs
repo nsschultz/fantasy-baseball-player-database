@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using FantasyBaseball.CommonModels.Enums;
-using FantasyBaseball.CommonModels.Player;
-using FantasyBaseball.CommonModels.Stats;
+using FantasyBaseball.Common.Enums;
+using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
 
 namespace FantasyBaseball.PlayerServiceDatabase.Services
@@ -23,9 +22,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             MergeBattingStats(incoming.ProjectedBattingStats, StatsType.PROJ, entity);
             MergePitchingStats(incoming.YearToDatePitchingStats, StatsType.YTD, entity);
             MergePitchingStats(incoming.ProjectedPitchingStats, StatsType.PROJ, entity);
-            MergeLeagueStatus(incoming.LeagueInfo.League1, 1, entity);
-            MergeLeagueStatus(incoming.LeagueInfo.League2, 2, entity);
-            MergePositions(incoming.PlayerInfo.Positions, positions, entity);
+            MergeLeagueStatus(incoming.League1, 1, entity);
+            MergeLeagueStatus(incoming.League2, 2, entity);
+            MergePositions(incoming.Positions, positions, entity);
             return entity;
         }
 
@@ -99,19 +98,19 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
         private static PlayerEntity MergePlayerValues(BaseballPlayer incoming, PlayerEntity entity)
         {
             if (entity == null) entity = new PlayerEntity();
-            entity.BhqId = incoming.PlayerInfo.Id;
-            entity.Type = incoming.PlayerInfo.Type;
-            entity.FirstName = incoming.PlayerInfo.FirstName;
-            entity.LastName = incoming.PlayerInfo.LastName;
-            entity.Age = incoming.PlayerInfo.Age;
-            entity.Team = incoming.PlayerInfo.Team;
-            entity.Status = incoming.PlayerInfo.Status;
-            entity.DraftRank = incoming.DraftInfo.DraftRank;
-            entity.AverageDraftPick = incoming.DraftInfo.AverageDraftPick;
-            entity.HighestPick = incoming.DraftInfo.HighestPick;
-            entity.DraftedPercentage = incoming.DraftInfo.DraftedPercentage;
-            entity.Reliability = incoming.BhqScores.Reliability;
-            entity.MayberryMethod = incoming.BhqScores.MayberryMethod;
+            entity.BhqId = incoming.BhqId;
+            entity.Type = incoming.Type;
+            entity.FirstName = incoming.FirstName;
+            entity.LastName = incoming.LastName;
+            entity.Age = incoming.Age;
+            entity.Team = incoming.Team;
+            entity.Status = incoming.Status;
+            entity.DraftRank = incoming.DraftRank;
+            entity.AverageDraftPick = incoming.AverageDraftPick;
+            entity.HighestPick = incoming.HighestPick;
+            entity.DraftedPercentage = incoming.DraftedPercentage;
+            entity.Reliability = incoming.Reliability;
+            entity.MayberryMethod = incoming.MayberryMethod;
             return entity;
         }
         

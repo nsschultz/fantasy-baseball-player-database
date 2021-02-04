@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using FantasyBaseball.CommonModels.Enums;
+using FantasyBaseball.Common.Enums;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
