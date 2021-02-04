@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FantasyBaseball.Common.Enums;
@@ -119,7 +120,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             if (fullPositionList == null) return;
             entity.Positions.Clear();
             var positionSet = fullPositionList.Select(p => p.Code).ToHashSet();
-            var splitPositions = incomingPostions != null ? incomingPostions.Split("-") : new string[]{};
+            var splitPositions = incomingPostions != null ? incomingPostions.Split("-") : Array.Empty<string>();
             entity.Positions.AddRange(splitPositions
                 .Select(p => p.Trim().ToUpper())
                 .Where(p => positionSet.Contains(p))

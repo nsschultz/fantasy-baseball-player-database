@@ -41,7 +41,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             }
         }
 
-        private PlayerEntity CleanEntity(PlayerEntity player)
+        private static PlayerEntity CleanEntity(PlayerEntity player)
         {
             player.MlbTeam = null;
             return player;
