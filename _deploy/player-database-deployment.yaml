@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: player-database
-        image: nschultz/fantasy-baseball-player-database:0.5.4
+        image: nschultz/fantasy-baseball-player-database:0.6.0
         ports:
           - name: web
             containerPort: 8080
