@@ -3,8 +3,18 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FantasyBaseball.CommonModels">
-      <HintPath>..\..\libs\FantasyBaseball.CommonModels.dll</HintPath>
+    <Reference Include="FantasyBaseball.Common.Enums">
+      <HintPath>..\..\libs\FantasyBaseball.Common.Enums.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FantasyBaseball.Common.Exceptions">
+      <HintPath>..\..\libs\FantasyBaseball.Common.Exceptions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FantasyBaseball.Common.Models">
+      <HintPath>..\..\libs\FantasyBaseball.Common.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

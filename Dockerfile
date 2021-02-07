@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM nschultz/fantasy-baseball-common-models:0.5.4 AS build
+FROM nschultz/fantasy-baseball-common:0.6.0 AS build
 COPY . /app
 ENV MAIN_PROJ=FantasyBaseball.PlayerServiceDatabase \
     SONAR_KEY=fantasy-baseball-player-database

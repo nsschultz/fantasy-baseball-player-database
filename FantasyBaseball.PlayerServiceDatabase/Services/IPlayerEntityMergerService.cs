@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using FantasyBaseball.CommonModels.Player;
+using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
 
 namespace FantasyBaseball.PlayerServiceDatabase.Services

@@ -1,17 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FantasyBaseball.CommonModels.Enums;
-using FantasyBaseball.CommonModels.Player;
-using FantasyBaseball.CommonModels.Stats;
+using FantasyBaseball.Common.Enums;
+using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
-using FantasyBaseball.PlayerServiceDatabase.Services;
 using Xunit;
 
-namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
+namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
 {
     public class BaseballPlayerBuilderServiceTest
     {
-        [Fact] public void BuildBaseballPlayerNullTest() => Assert.Equal(0, new BaseballPlayerBuilderService().BuildBaseballPlayer(null).PlayerInfo.Id);
+        [Fact] public void BuildBaseballPlayerNullTest() => Assert.Equal(0, new BaseballPlayerBuilderService().BuildBaseballPlayer(null).BhqId);
 
         [Theory]
         [InlineData(10 , PlayerType.B)]
@@ -25,6 +24,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
         private static PlayerEntity BuildPlayer(int value, PlayerType type) =>
             new PlayerEntity 
             {
+                Id = Guid.NewGuid(),
                 BhqId = value,
                 FirstName = $"First-{value}",
                 LastName = $"Last-{value}",
@@ -100,22 +100,23 @@ namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
 
         private static void ValidatePlayer(int value, PlayerEntity expected, BaseballPlayer actual)
         {
-            Assert.Equal(expected.BhqId, actual.PlayerInfo.Id);
-            Assert.Equal(expected.FirstName, actual.PlayerInfo.FirstName);
-            Assert.Equal(expected.LastName, actual.PlayerInfo.LastName);
-            Assert.Equal(expected.Age, actual.PlayerInfo.Age);
-            Assert.Equal(expected.Type, actual.PlayerInfo.Type);
-            Assert.Equal(BuildPositionString(expected.Positions), actual.PlayerInfo.Positions);
-            Assert.Equal(expected.Team, actual.PlayerInfo.Team);
-            Assert.Equal(expected.Status, actual.PlayerInfo.Status);
-            Assert.Equal(expected.DraftRank, actual.DraftInfo.DraftRank);
-            Assert.Equal(expected.AverageDraftPick, actual.DraftInfo.AverageDraftPick);
-            Assert.Equal(expected.HighestPick, actual.DraftInfo.HighestPick);
-            Assert.Equal(expected.DraftedPercentage, actual.DraftInfo.DraftedPercentage);
-            Assert.Equal(expected.MayberryMethod, actual.BhqScores.MayberryMethod);
-            Assert.Equal(expected.Reliability, actual.BhqScores.Reliability);
-            Assert.Equal(value == 10 ? expected.LeagueStatuses.First().LeagueStatus : LeagueStatus.A, actual.LeagueInfo.League1);
-            Assert.Equal(value != 10 ? expected.LeagueStatuses.First().LeagueStatus : LeagueStatus.A, actual.LeagueInfo.League2);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.BhqId, actual.BhqId);
+            Assert.Equal(expected.FirstName, actual.FirstName);
+            Assert.Equal(expected.LastName, actual.LastName);
+            Assert.Equal(expected.Age, actual.Age);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(BuildPositionString(expected.Positions), actual.Positions);
+            Assert.Equal(expected.Team, actual.Team);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.DraftRank, actual.DraftRank);
+            Assert.Equal(expected.AverageDraftPick, actual.AverageDraftPick);
+            Assert.Equal(expected.HighestPick, actual.HighestPick);
+            Assert.Equal(expected.DraftedPercentage, actual.DraftedPercentage);
+            Assert.Equal(expected.MayberryMethod, actual.MayberryMethod);
+            Assert.Equal(expected.Reliability, actual.Reliability);
+            Assert.Equal(value == 10 ? expected.LeagueStatuses.First().LeagueStatus : LeagueStatus.A, actual.League1);
+            Assert.Equal(value != 10 ? expected.LeagueStatuses.First().LeagueStatus : LeagueStatus.A, actual.League2);
             ValidatePlayerBattingStats(value == 10 ? expected.BattingStats.First() : new BattingStatsEntity(), actual.YearToDateBattingStats);
             ValidatePlayerBattingStats(value != 10 ? expected.BattingStats.First() : new BattingStatsEntity(), actual.ProjectedBattingStats);
             ValidatePlayerBattingStats(expected.BattingStats.First(), actual.CombinedBattingStats);

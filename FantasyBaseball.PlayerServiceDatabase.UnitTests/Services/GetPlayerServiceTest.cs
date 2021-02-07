@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FantasyBaseball.CommonModels.Enums;
+using FantasyBaseball.Common.Enums;
 using FantasyBaseball.PlayerServiceDatabase.Database;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
-using FantasyBaseball.PlayerServiceDatabase.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Xunit;
 
-namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Controllers
+namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
 {
     public class GetPlayerServiceTest : IDisposable
     {

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using FantasyBaseball.CommonModels.Enums;
+using FantasyBaseball.Common.Enums;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -66,7 +66,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
             BuildPlayerPositionModel(modelBuilder.Entity<PlayerPositionEntity>());
         }
 
-        private void BuildBattingStatsModel(EntityTypeBuilder<BattingStatsEntity> builder)
+        private static void BuildBattingStatsModel(EntityTypeBuilder<BattingStatsEntity> builder)
         {
             builder.HasKey(b => new { b.PlayerId, b.StatsType }).HasName("BattingStats_PK");
             builder.HasOne(b => b.Player)
@@ -75,7 +75,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
                 .HasConstraintName("BattingStats_Player_FK");
         }
 
-        private void BuildMlbTeamModel(EntityTypeBuilder<MlbTeamEntity> builder)  
+        private static void BuildMlbTeamModel(EntityTypeBuilder<MlbTeamEntity> builder)  
         {
             builder.HasKey(b => b.Code).HasName("MlbTeam_PK");
             builder.Property(b => b.Code).HasMaxLength(3);
@@ -118,7 +118,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
             );
         }
         
-        private void BuildPitchingStatsModel(EntityTypeBuilder<PitchingStatsEntity> builder)
+        private static void BuildPitchingStatsModel(EntityTypeBuilder<PitchingStatsEntity> builder)
         {
             builder.HasKey(b => new { b.PlayerId, b.StatsType }).HasName("PitchingStats_PK");
             builder.HasOne(b => b.Player)
@@ -127,7 +127,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
                 .HasConstraintName("PitchingStats_Player_FK");
         }
 
-        private void BuildPlayerLeagueStatusModel(EntityTypeBuilder<PlayerLeagueStatusEntity> builder)
+        private static void BuildPlayerLeagueStatusModel(EntityTypeBuilder<PlayerLeagueStatusEntity> builder)
         {
             builder.HasKey(b => new { b.PlayerId, b.LeagueId }).HasName("LeagueStatus_PK");
             builder.HasOne(b => b.Player)
@@ -136,7 +136,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
                 .HasConstraintName("LeagueStatus_Player_FK");
         }
 
-        private void BuildPlayerModel(EntityTypeBuilder<PlayerEntity> builder) 
+        private static void BuildPlayerModel(EntityTypeBuilder<PlayerEntity> builder) 
         {
             builder.HasKey(b => b.Id).HasName("Player_PK");
             builder.Property(b => b.Id).ValueGeneratedOnAdd();
@@ -149,7 +149,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
                 .HasConstraintName("Player_MlbTeam_FK");
         }
 
-        private void BuildPlayerPositionModel(EntityTypeBuilder<PlayerPositionEntity> builder)
+        private static void BuildPlayerPositionModel(EntityTypeBuilder<PlayerPositionEntity> builder)
         {
             builder.HasKey(pp => new { pp.PlayerId, pp.PositionCode });  
             builder.HasOne(pp => pp.Player)
@@ -162,7 +162,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
                 .HasConstraintName("PlayerPosition_Position_FK");  
         }
 
-        private void BuildPositionModel(EntityTypeBuilder<PositionEntity> builder)  
+        private static void BuildPositionModel(EntityTypeBuilder<PositionEntity> builder)  
         {
             builder.HasKey(b => b.Code).HasName("Position_PK");
             builder.Property(b => b.Code).HasMaxLength(3);

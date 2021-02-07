@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using FantasyBaseball.CommonModels.Builders;
-using FantasyBaseball.CommonModels.Enums;
-using FantasyBaseball.CommonModels.Player;
-using FantasyBaseball.CommonModels.Stats;
+using FantasyBaseball.Common.Enums;
+using FantasyBaseball.Common.Models;
+using FantasyBaseball.Common.Models.Builders;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
 
 namespace FantasyBaseball.PlayerServiceDatabase.Services
@@ -19,11 +18,24 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             return player == null 
                 ? new BaseballPlayer() 
                 : BuildStats(new BaseballPlayer 
-                    {
-                        PlayerInfo = BuildPlayerInfo(player),
-                        LeagueInfo = BuildLeagueInfo(player),
-                        DraftInfo = BuildDraftInfo(player),
-                        BhqScores = BuildBhqScores(player),
+                    {   
+                        Id = player.Id,
+                        BhqId = player.BhqId,
+                        FirstName = player.FirstName,
+                        LastName = player.LastName,
+                        Age = player.Age,
+                        Type = player.Type,
+                        Positions = BuildPositionString(player.Positions),
+                        Team = player.Team,
+                        Status = player.Status,
+                        League1 = player.LeagueStatuses.Where(p => p.LeagueId == 1).Select(l => l.LeagueStatus).FirstOrDefault(),
+                        League2 = player.LeagueStatuses.Where(p => p.LeagueId == 2).Select(l => l.LeagueStatus).FirstOrDefault(),
+                        DraftRank = player.DraftRank,
+                        AverageDraftPick = player.AverageDraftPick,
+                        HighestPick = player.HighestPick,
+                        DraftedPercentage = player.DraftedPercentage,
+                        MayberryMethod = player.MayberryMethod,
+                        Reliability = player.Reliability,
                         YearToDateBattingStats = BuildBattingStats(player, StatsType.YTD),
                         YearToDatePitchingStats = BuildPitchingStats(player, StatsType.YTD),
                         ProjectedBattingStats = BuildBattingStats(player, StatsType.PROJ),
@@ -52,29 +64,6 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             };
         }
 
-        private static BhqScores BuildBhqScores(PlayerEntity player) =>
-            new BhqScores
-            {
-                MayberryMethod = player.MayberryMethod,
-                Reliability = player.Reliability
-            };
-
-        private static DraftInfo BuildDraftInfo(PlayerEntity player) =>
-            new DraftInfo
-            {
-                DraftRank = player.DraftRank,
-                AverageDraftPick = player.AverageDraftPick,
-                HighestPick = player.HighestPick,
-                DraftedPercentage = player.DraftedPercentage
-            };
-
-        private static LeagueInfo BuildLeagueInfo(PlayerEntity player) =>
-            new LeagueInfo
-            {
-                League1 = player.LeagueStatuses.Where(p => p.LeagueId == 1).Select(l => l.LeagueStatus).FirstOrDefault(),
-                League2 = player.LeagueStatuses.Where(p => p.LeagueId == 2).Select(l => l.LeagueStatus).FirstOrDefault()
-            };
-
         private static PitchingStats BuildPitchingStats(PlayerEntity player, StatsType statsType)
         {
             var stats = player.PitchingStats.FirstOrDefault(b => b.StatsType == statsType);
@@ -96,19 +85,6 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
                 GroundBallRate = stats.GroundBallRate
             };
         }
-
-        private static PlayerInfo BuildPlayerInfo(PlayerEntity player) =>
-            new PlayerInfo
-            {
-                Id = player.BhqId,
-                FirstName = player.FirstName,
-                LastName = player.LastName,
-                Age = player.Age,
-                Type = player.Type,
-                Positions = BuildPositionString(player.Positions),
-                Team = player.Team,
-                Status = player.Status
-            };
 
         private static string BuildPositionString(List<PlayerPositionEntity> positions) =>
             string.Join("-", positions.Select(p => p.Position).OrderBy(p => p.SortOrder).Select(p => p.Code));

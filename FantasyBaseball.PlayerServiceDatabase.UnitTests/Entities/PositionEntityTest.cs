@@ -1,8 +1,7 @@
-using FantasyBaseball.CommonModels.Enums;
-using FantasyBaseball.PlayerServiceDatabase.Entities;
+using FantasyBaseball.Common.Enums;
 using Xunit;
 
-namespace FantasyBaseball.PlayerServiceDatabase.UnitTests.Entities
+namespace FantasyBaseball.PlayerServiceDatabase.Entities.UnitTests
 {
     public class PositionEntityTest
     {
