@@ -48,7 +48,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
         }
 
         private PlayerEntity FindEntity(BaseballPlayer player) =>
-            player.Id != Guid.Empty
+            player.Id != default
                 ? _context.Players.Find(player.Id)
                 : _context.Players.AsQueryable().Where(p => p.BhqId == player.BhqId).Where(p => p.Type == player.Type).FirstOrDefault();
 
