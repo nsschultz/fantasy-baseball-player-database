@@ -21,9 +21,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             await _context.Players
                 .Include(p => p.LeagueStatuses)
                 .Include(p => p.MlbTeam)
+                .Include(p => p.Positions).ThenInclude(p => p.Position)
                 .Include(p => p.BattingStats)
                 .Include(p => p.PitchingStats)
-                .Include(p => p.Positions).ThenInclude(p => p.Position)
                 .ToListAsync();
     }
 }

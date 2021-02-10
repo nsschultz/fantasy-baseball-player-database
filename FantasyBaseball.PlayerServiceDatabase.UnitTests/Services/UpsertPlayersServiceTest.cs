@@ -85,7 +85,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
         private async Task<PlayerContext> CreateContext()
         {
             var options = new DbContextOptionsBuilder<PlayerContext>()
-                .UseInMemoryDatabase(databaseName: "UpsertPlayersTestValid")
+                .UseInMemoryDatabase(databaseName: "UpdatePlayerServiceTest")
                 .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
             var context = new PlayerContext(options);

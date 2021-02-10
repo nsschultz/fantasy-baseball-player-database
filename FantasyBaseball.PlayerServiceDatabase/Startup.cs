@@ -53,10 +53,11 @@ namespace FantasyBaseball.PlayerServiceDatabase
                 .AddSingleton(Configuration)
                 .AddDbContext<PlayerContext>(options => options.UseNpgsql(connectionString))
                 .AddScoped<IPlayerContext>(provider => provider.GetService<PlayerContext>())
-                .AddScoped<IGetPlayersService, GetPlayersService>()
-                .AddScoped<IUpsertPlayersService, UpsertPlayersService>()
                 .AddSingleton<IBaseballPlayerBuilderService, BaseballPlayerBuilderService>()
+                .AddScoped<IGetPlayersService, GetPlayersService>()
                 .AddSingleton<IPlayerEntityMergerService, PlayerEntityMergerService>()
+                .AddScoped<IPlayerUpdateService, PlayerUpdateService>()
+                .AddScoped<IUpsertPlayersService, UpsertPlayersService>()
                 .AddControllers();
         }
     }
