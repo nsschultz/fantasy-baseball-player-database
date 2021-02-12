@@ -51,6 +51,7 @@ namespace FantasyBaseball.PlayerServiceDatabase
                 .AddCors(options => options.AddDefaultPolicy(builder => builder
                     .WithOrigins("http://*.schultz.local", "http://localhost")
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
                     .AllowAnyMethod()))
                 .AddSingleton(Configuration)
                 .AddDbContext<PlayerContext>(options => options.UseNpgsql(connectionString))
