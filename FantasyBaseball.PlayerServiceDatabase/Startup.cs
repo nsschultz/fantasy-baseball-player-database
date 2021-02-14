@@ -48,8 +48,11 @@ namespace FantasyBaseball.PlayerServiceDatabase
                 Configuration["player-database-user"], Configuration["player-database-password"]);
             services.AddHealthChecks().AddDbContextCheck<PlayerContext>();
             services
-                .AddCors(options => options.AddDefaultPolicy(builder => 
-                    builder.WithOrigins("http://*.schultz.local", "http://localhost").SetIsOriginAllowedToAllowWildcardSubdomains()))
+                .AddCors(options => options.AddDefaultPolicy(builder => builder
+                    .WithOrigins("http://*.schultz.local", "http://localhost")
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()))
                 .AddSingleton(Configuration)
                 .AddDbContext<PlayerContext>(options => options.UseNpgsql(connectionString))
                 .AddScoped<IPlayerContext>(provider => provider.GetService<PlayerContext>())
