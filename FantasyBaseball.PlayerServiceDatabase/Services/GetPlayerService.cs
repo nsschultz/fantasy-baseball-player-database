@@ -13,7 +13,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
 
         /// <summary>Creates a new instance of the service.</summary>
         /// <param name="context">The player context.</param>
-        public GetPlayersService(IPlayerContext context) =>_context = context;
+        public GetPlayersService(IPlayerContext context) => _context = context;
         
         /// <summary>Gets the players from the underlying source.</summary>
         /// <returns>A list of the players.</returns>
