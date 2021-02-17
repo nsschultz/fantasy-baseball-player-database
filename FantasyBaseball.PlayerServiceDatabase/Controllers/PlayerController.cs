@@ -14,29 +14,38 @@ namespace FantasyBaseball.PlayerServiceDatabase.Controllers
         private readonly IBaseballPlayerBuilderService _playerBuilder;
         private readonly IGetPlayersService _getService;
         private readonly IPlayerUpdateService _updateService;
+        private readonly ISortService _sortService;
         private readonly IUpsertPlayersService _upsertService;
 
         /// <summary>Creates a new instance of the controller.</summary>
         /// <param name="context">The player context.</param>
         /// <param name="playerBuilder">Service for converting a PlayerEntity to a BaseballPlayer.</param>
         /// <param name="getService">Service for getting players.</param>
+        /// <param name="sortService">The service for sorting the players.</param>
         /// <param name="updateService">Service for updating a player.</param>
         /// <param name="upsertService">Service for upserting players.</param>
         public PlayerController(IBaseballPlayerBuilderService playerBuilder,
                                 IGetPlayersService getService,
                                 IPlayerUpdateService updateService,
+                                ISortService sortService,
                                 IUpsertPlayersService upsertService) 
         { 
             _playerBuilder = playerBuilder;
             _getService = getService;
             _updateService = updateService;
+            _sortService = sortService;
             _upsertService = upsertService;
         }
 
         /// <summary>Gets all of the players from the source.</summary>
         /// <returns>All of the players from the source.</returns>
-        [HttpGet] public async Task<PlayerCollection> GetPlayers() =>
-            new PlayerCollection { Players = (await _getService.GetPlayers()).Select(player => _playerBuilder.BuildBaseballPlayer(player)).ToList() }; 
+        [HttpGet] public async Task<PlayerCollection> GetPlayers()
+        {
+            var players = await _getService.GetPlayers();
+            var baseballPlayers = players.Select(player => _playerBuilder.BuildBaseballPlayer(player)).ToList();
+            baseballPlayers = _sortService.SortPlayers(baseballPlayers);
+            return new PlayerCollection { Players = baseballPlayers };
+        }
 
         /// <summary>Gets all of the players from the source.</summary>
         /// <param name="player">The object containing all of the player's data (non-changed data must be included as well).</param>

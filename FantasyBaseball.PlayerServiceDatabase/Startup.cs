@@ -60,6 +60,7 @@ namespace FantasyBaseball.PlayerServiceDatabase
                 .AddScoped<IGetPlayersService, GetPlayersService>()
                 .AddSingleton<IPlayerEntityMergerService, PlayerEntityMergerService>()
                 .AddScoped<IPlayerUpdateService, PlayerUpdateService>()
+                .AddSingleton<ISortService, SortService>()
                 .AddScoped<IUpsertPlayersService, UpsertPlayersService>()
                 .AddControllers();
         }
