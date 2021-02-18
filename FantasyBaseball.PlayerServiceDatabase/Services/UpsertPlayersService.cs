@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FantasyBaseball.Common.Models;
 using FantasyBaseball.PlayerServiceDatabase.Database;
 using FantasyBaseball.PlayerServiceDatabase.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyBaseball.PlayerServiceDatabase.Services
 {
@@ -49,8 +50,22 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
 
         private PlayerEntity FindEntity(BaseballPlayer player) =>
             player.Id != default
-                ? _context.Players.Find(player.Id)
-                : _context.Players.AsQueryable().Where(p => p.BhqId == player.BhqId).Where(p => p.Type == player.Type).FirstOrDefault();
+                ? _context.Players
+                    .Include(p => p.LeagueStatuses)
+                    .Include(p => p.MlbTeam)
+                    .Include(p => p.Positions).ThenInclude(p => p.Position)
+                    .Include(p => p.BattingStats)
+                    .Include(p => p.PitchingStats)
+                    .FirstOrDefault(p => p.Id == player.Id)
+                : _context.Players.AsQueryable()
+                    .Include(p => p.LeagueStatuses)
+                    .Include(p => p.MlbTeam)
+                    .Include(p => p.Positions).ThenInclude(p => p.Position)
+                    .Include(p => p.BattingStats)
+                    .Include(p => p.PitchingStats)
+                    .Where(p => p.BhqId == player.BhqId)
+                    .Where(p => p.Type == player.Type)
+                    .FirstOrDefault();
 
         private async Task UpsertPlayers(IEnumerable<PlayerEntity> entities)
         {
