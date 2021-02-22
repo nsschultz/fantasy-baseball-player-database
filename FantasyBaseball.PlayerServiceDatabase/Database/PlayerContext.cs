@@ -37,6 +37,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
 
         /// <summary>A collection of positions.</summary>
         public DbSet<PositionEntity> Positions { get; set; }
+        
+        /// <summary>A collection of teams.</summary>
+        public DbSet<MlbTeamEntity> Teams { get; set; }
  
         /// <summary>Starts a new database transaction.</summary>
         public async Task BeginTransaction() => _transaction = await Database.BeginTransactionAsync();
@@ -84,7 +87,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
             builder.Property(b => b.City).HasMaxLength(20);
             builder.Property(b => b.Nickname).HasMaxLength(20);
             builder.HasData(
-                new MlbTeamEntity { Code = ""   , MlbLeagueId = "",   City = "Free Agent"   , Nickname = "Free Agent"                            },
+                new MlbTeamEntity { Code = ""   , MlbLeagueId = ""  , City = "Free Agent"   , Nickname = "Free Agent"                            },
                 new MlbTeamEntity { Code = "BAL", MlbLeagueId = "AL", City = "Baltimore"    , Nickname = "Orioles"                               },
                 new MlbTeamEntity { Code = "BOS", MlbLeagueId = "AL", City = "Boston"       , Nickname = "Red Sox"                               },
                 new MlbTeamEntity { Code = "NYY", MlbLeagueId = "AL", City = "New York"     , Nickname = "Yankees"                               },

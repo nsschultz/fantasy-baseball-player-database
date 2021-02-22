@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FantasyBaseball.Common.Enums;
@@ -20,7 +19,16 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
             new PositionEntity { SortOrder = 1,   Code = "POS1"   , PlayerType = PlayerType.B },
         };
 
-        [Fact] public void MergePlayerEntityNullTest() => Assert.Null(new PlayerEntityMergerService().MergePlayerEntity(null, new PlayerEntity(), POSITIONS));
+        private static readonly List<MlbTeamEntity> TEAMS = new List<MlbTeamEntity> 
+        {
+            new MlbTeamEntity { Code = ""        , MlbLeagueId = ""  , City = "Default", Nickname = "Default"                             },
+            new MlbTeamEntity { Code = "TEAM-123", MlbLeagueId = "AL", City = "Team"   , Nickname = "1"                                   },
+            new MlbTeamEntity { Code = "TEAM-100", MlbLeagueId = "NL", City = "Team"   , Nickname = "2"      ,  AlternativeCode = "100-TM"}
+        };
+
+        private static readonly Dictionary<int, string> EXPECTED_TEAMS = new Dictionary<int, string> { { 10, "" }, { 100, "TEAM-100" }, { 123, "TEAM-123" } };
+
+        [Fact] public void MergePlayerEntityNullTest() => Assert.Null(new PlayerEntityMergerService().MergePlayerEntity(null, new PlayerEntity(), POSITIONS, TEAMS));
 
         [Theory]
         [InlineData(10 , PlayerType.B)]
@@ -29,8 +37,8 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
         public void MergePlayerEntityMatchMissingEntriesTest(int value, PlayerType type)
         {
             var player = BuildPlayer(value, type);
-            var otherEntity = new PlayerEntityMergerService().MergePlayerEntity(BuildPlayer(value == 10 ? 100 : 10, PlayerType.U), null, POSITIONS);
-            ValidatePlayer(value, player, new PlayerEntityMergerService().MergePlayerEntity(player, otherEntity, POSITIONS));
+            var otherEntity = new PlayerEntityMergerService().MergePlayerEntity(BuildPlayer(value == 10 ? 100 : 10, PlayerType.U), null, POSITIONS, TEAMS);
+            ValidatePlayer(value, player, new PlayerEntityMergerService().MergePlayerEntity(player, otherEntity, POSITIONS, TEAMS));
         }
 
         [Theory]
@@ -40,8 +48,8 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
         public void MergePlayerEntityMatchSameEntriesTest(int value, PlayerType type)
         {
             var player = BuildPlayer(value, type);
-            var otherEntity = new PlayerEntityMergerService().MergePlayerEntity(BuildPlayer(value, type), null, POSITIONS);
-            ValidatePlayer(value, player, new PlayerEntityMergerService().MergePlayerEntity(player, otherEntity, POSITIONS));
+            var otherEntity = new PlayerEntityMergerService().MergePlayerEntity(BuildPlayer(value, type), null, POSITIONS, TEAMS);
+            ValidatePlayer(value, player, new PlayerEntityMergerService().MergePlayerEntity(player, otherEntity, POSITIONS, TEAMS));
         }
 
         [Theory]
@@ -51,7 +59,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
         public void MergePlayerEntityNoMatchTest(int value, PlayerType type)
         {
             var player = BuildPlayer(value, type);
-            ValidatePlayer(value, player, new PlayerEntityMergerService().MergePlayerEntity(player, null, POSITIONS));
+            ValidatePlayer(value, player, new PlayerEntityMergerService().MergePlayerEntity(player, null, POSITIONS, TEAMS));
         }
 
         private static BattingStats BuildBattingStats() =>
@@ -100,7 +108,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
                 Age = value,
                 Type = type,
                 Positions = type == PlayerType.U ? "abc" : $"Pos{value}",
-                Team = $"Team-{value}",
+                Team = value == 100 ? $"{value}-tm" : $"Team-{value}",
                 Status = value == 10 ? PlayerStatus.XX : PlayerStatus.DL,
                 DraftRank = value + 1,
                 AverageDraftPick = value + 2,
@@ -126,7 +134,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
             Assert.Equal(expected.Age, actual.Age);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.Type == PlayerType.U ? "DEFAULT" : expected.Positions.ToUpper(), BuildPositionString(actual.Positions));
-            Assert.Equal(expected.Team, actual.Team);
+            Assert.Equal(EXPECTED_TEAMS[value], actual.Team);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.DraftRank, actual.DraftRank);
             Assert.Equal(expected.AverageDraftPick, actual.AverageDraftPick);

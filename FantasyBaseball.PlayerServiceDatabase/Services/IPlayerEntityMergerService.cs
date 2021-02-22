@@ -11,7 +11,8 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
         /// <param name="incoming">The incoming player values.</param>
         /// <param name="existing">The existing player values.</param>
         /// <param name="positions">The collection of all of the available positions.</param>
+        /// <param name="teams">The collection of all of the teams.</param>
         /// <returns>An object that can be saved to the database.</returns>
-        PlayerEntity MergePlayerEntity(BaseballPlayer incoming, PlayerEntity existing, List<PositionEntity> positions);
+        PlayerEntity MergePlayerEntity(BaseballPlayer incoming, PlayerEntity existing, List<PositionEntity> positions, List<MlbTeamEntity> teams);
     }
 }

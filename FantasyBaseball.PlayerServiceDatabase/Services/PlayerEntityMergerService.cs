@@ -14,8 +14,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
         /// <param name="incoming">The incoming player values.</param>
         /// <param name="existing">The existing player values.</param>
         /// <param name="positions">The collection of all of the available positions.</param>
+        /// <param name="teams">The collection of all of the teams.</param>
         /// <returns>An object that can be saved to the database.</returns>
-        public PlayerEntity MergePlayerEntity(BaseballPlayer incoming, PlayerEntity existing, List<PositionEntity> positions)
+        public PlayerEntity MergePlayerEntity(BaseballPlayer incoming, PlayerEntity existing, List<PositionEntity> positions, List<MlbTeamEntity> teams)
         {
             if (incoming == null) return null;
             var entity = MergePlayerValues(incoming, existing);
@@ -26,6 +27,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             MergeLeagueStatus(incoming.League1, 1, entity);
             MergeLeagueStatus(incoming.League2, 2, entity);
             MergePositions(incoming.Positions, positions, entity);
+            MergeTeam(incoming.Team, teams, entity);
             return entity;
         }
 
@@ -126,6 +128,16 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
                 .Where(p => positionSet.Contains(p))
                 .Select(p => new PlayerPositionEntity { PositionCode = p }));
             if (!entity.Positions.Any()) entity.Positions.Add(FindDefaultPosition(fullPositionList, entity));
+        }
+
+        private static void MergeTeam(string incomingTeam, List<MlbTeamEntity> fullTeamList, PlayerEntity entity)
+        {
+            if (fullTeamList == null) return;
+            incomingTeam = string.IsNullOrWhiteSpace(incomingTeam) ? string.Empty : incomingTeam.Trim().ToUpper();
+            var mlbTeam = fullTeamList.FirstOrDefault(t => t.Code == incomingTeam || (!string.IsNullOrWhiteSpace(t.AlternativeCode) && t.AlternativeCode == incomingTeam));
+            mlbTeam = mlbTeam ?? fullTeamList.FirstOrDefault(t => t.Code == string.Empty);
+            entity.MlbTeam = mlbTeam;
+            entity.Team = mlbTeam.Code;
         }
 
         private static BattingStatsEntity SetupBattingStats(PlayerEntity entity, StatsType statsType)

@@ -54,8 +54,8 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services.UnitTests
         private IPlayerEntityMergerService BuildMergeService() 
         {
             var mergeService = new Mock<IPlayerEntityMergerService>();
-            mergeService.Setup(o => o.MergePlayerEntity(It.IsAny<BaseballPlayer>(), It.IsAny<PlayerEntity>(), It.IsAny<List<PositionEntity>>()))
-                .Returns((BaseballPlayer player, PlayerEntity entity, List<PositionEntity> positions) =>
+            mergeService.Setup(o => o.MergePlayerEntity(It.IsAny<BaseballPlayer>(), It.IsAny<PlayerEntity>(), It.IsAny<List<PositionEntity>>(), It.IsAny<List<MlbTeamEntity>>()))
+                .Returns((BaseballPlayer player, PlayerEntity entity, List<PositionEntity> positions, List<MlbTeamEntity> teams) =>
                     { 
                         entity.BhqId = player.BhqId;
                         entity.Type = player.Type;

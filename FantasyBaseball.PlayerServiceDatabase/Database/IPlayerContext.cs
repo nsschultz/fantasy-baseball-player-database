@@ -21,6 +21,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
 
         /// <summary>A collection of positions.</summary>
         DbSet<PositionEntity> Positions { get; set; }
+        
+        /// <summary>A collection of teams.</summary>
+        DbSet<MlbTeamEntity> Teams { get; set; }
 
         /// <summary>Starts a new database transaction.</summary>
         Task BeginTransaction();

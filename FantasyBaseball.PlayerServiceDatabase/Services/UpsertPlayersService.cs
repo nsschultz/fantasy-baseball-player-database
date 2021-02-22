@@ -30,9 +30,10 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
         {
             try
             {
-                var positions = _context.Positions.ToList();
+                var positions = await _context.Positions.ToListAsync();
+                var teams = await _context.Teams.ToListAsync();
                 await _context.BeginTransaction();
-                await UpsertPlayers(players.Select(p => _entityMerger.MergePlayerEntity(p, FindEntity(p), positions)));
+                await UpsertPlayers(players.Select(p => _entityMerger.MergePlayerEntity(p, FindEntity(p), positions, teams)));
                 await _context.Commit();
             }
             catch(Exception)
@@ -40,12 +41,6 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
                 await _context.Rollback();
                 throw;
             }
-        }
-
-        private static PlayerEntity CleanEntity(PlayerEntity player)
-        {
-            player.MlbTeam = null;
-            return player;
         }
 
         private PlayerEntity FindEntity(BaseballPlayer player) =>
@@ -69,9 +64,8 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
 
         private async Task UpsertPlayers(IEnumerable<PlayerEntity> entities)
         {
-            var cleaned = entities.Select(p => CleanEntity(p));
-            await _context.Players.AddRangeAsync(cleaned.Where(p => p.Id == default));
-            _context.Players.UpdateRange(cleaned.Where(p => p.Id != default));
+            await _context.Players.AddRangeAsync(entities.Where(p => p.Id == default));
+            _context.Players.UpdateRange(entities.Where(p => p.Id != default));
         }
     }
 }
