@@ -26,7 +26,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
         /// <summary>A collection of league statuses.</summary>
         public DbSet<PlayerLeagueStatusEntity> LeagueStatuses { get; set; }
 
-        /// <summary>A collection of mlb teams statuses.</summary>
+        /// <summary>A collection of mlb teams.</summary>
         public DbSet<MlbTeamEntity> MlbTeams { get; set; }
 
         /// <summary>A collection of pitching stats.</summary>
@@ -37,9 +37,6 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
 
         /// <summary>A collection of positions.</summary>
         public DbSet<PositionEntity> Positions { get; set; }
-        
-        /// <summary>A collection of teams.</summary>
-        public DbSet<MlbTeamEntity> Teams { get; set; }
  
         /// <summary>Starts a new database transaction.</summary>
         public async Task BeginTransaction() => _transaction = await Database.BeginTransactionAsync();

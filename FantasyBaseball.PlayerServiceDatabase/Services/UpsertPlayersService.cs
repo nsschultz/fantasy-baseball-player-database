@@ -31,7 +31,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
             try
             {
                 var positions = await _context.Positions.ToListAsync();
-                var teams = await _context.Teams.ToListAsync();
+                var teams = await _context.MlbTeams.ToListAsync();
                 await _context.BeginTransaction();
                 await UpsertPlayers(players.Select(p => _entityMerger.MergePlayerEntity(p, FindEntity(p), positions, teams)));
                 await _context.Commit();
