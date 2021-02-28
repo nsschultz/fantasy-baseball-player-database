@@ -26,7 +26,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
         /// <summary>A collection of league statuses.</summary>
         public DbSet<PlayerLeagueStatusEntity> LeagueStatuses { get; set; }
 
-        /// <summary>A collection of mlb teams statuses.</summary>
+        /// <summary>A collection of mlb teams.</summary>
         public DbSet<MlbTeamEntity> MlbTeams { get; set; }
 
         /// <summary>A collection of pitching stats.</summary>
@@ -84,7 +84,7 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
             builder.Property(b => b.City).HasMaxLength(20);
             builder.Property(b => b.Nickname).HasMaxLength(20);
             builder.HasData(
-                new MlbTeamEntity { Code = ""   , MlbLeagueId = "",   City = "Free Agent"   , Nickname = "Free Agent"                            },
+                new MlbTeamEntity { Code = ""   , MlbLeagueId = ""  , City = "Free Agent"   , Nickname = "Free Agent"                            },
                 new MlbTeamEntity { Code = "BAL", MlbLeagueId = "AL", City = "Baltimore"    , Nickname = "Orioles"                               },
                 new MlbTeamEntity { Code = "BOS", MlbLeagueId = "AL", City = "Boston"       , Nickname = "Red Sox"                               },
                 new MlbTeamEntity { Code = "NYY", MlbLeagueId = "AL", City = "New York"     , Nickname = "Yankees"                               },

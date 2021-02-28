@@ -13,6 +13,9 @@ namespace FantasyBaseball.PlayerServiceDatabase.Database
         /// <summary>A collection of league statuses.</summary>
         DbSet<PlayerLeagueStatusEntity> LeagueStatuses { get; set; }
 
+        /// <summary>A collection of mlb teams.</summary>
+        DbSet<MlbTeamEntity> MlbTeams { get; set; }
+
         /// <summary>A collection of pitching stats.</summary>
         DbSet<PitchingStatsEntity> PitchingStats { get; set; }
 

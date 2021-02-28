@@ -35,7 +35,8 @@ namespace FantasyBaseball.PlayerServiceDatabase.Services
                 .FirstOrDefaultAsync(p => p.Id == player.Id);
             if (existingPlayer == null) throw new BadRequestException("This player does not exist");
             var positions = await _context.Positions.ToListAsync();
-            var updatedPlayer = _entityMerger.MergePlayerEntity(player, existingPlayer, positions);
+            var teams = await _context.MlbTeams.ToListAsync();
+            var updatedPlayer = _entityMerger.MergePlayerEntity(player, existingPlayer, positions, teams);
             try
             {
                 await _context.BeginTransaction();
